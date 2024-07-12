@@ -1,0 +1,91 @@
+import java.util.Properties
+
+// 尝试从 Git 标签获取版本号
+def getVersionFromGit() {
+	try {
+		def tag = 'git describe --tags --abbrev=0'.execute().text.trim()
+		return tag
+	} catch (Exception e) {
+		println "Failed to get version from Git tags: ${e.message}"
+		return null
+	}
+}
+// 从 version.properties 文件获取版本号
+def getVersionFromProperties() {
+	def versionFile = file('./src/main/resources/gradle.properties')
+	def properties = new Properties()
+	// 尝试从文件中读取版本号
+	if (versionFile.exists()) {
+		try {
+			versionFile.withInputStream { properties.load(it) }
+			return properties.getProperty('version')
+		} catch (Exception e) {
+			println "Failed to load version from version.properties: ${e.message}"
+			return null
+		}
+	} else {
+		println "version.properties file not found."
+		return null
+	}
+}
+// 主逻辑：先尝试从 Git 获取版本号，失败则从 version.properties 获取
+def getVersion() {
+	def version = getVersionFromGit()
+	if (version == null || version == "") {
+		version = getVersionFromProperties()
+	}
+	def v = version ?: '1.0.0-default'  // 如果都获取不到，则返回一个默认版本号
+	println("当前版本号:"+v)
+	return v
+}
+
+buildscript {
+	allprojects {
+		gradle.projectsEvaluated {
+			allprojects {
+				jar{ enabled = true }
+			}
+		}
+	}
+}
+
+
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+
+	java {
+		toolchain {
+			languageVersion = JavaLanguageVersion.of(21)
+		}
+	}
+	group = 'us.sushome'
+	repositories {
+		maven { url 'https://maven.aliyun.com/repository/public' }
+		mavenCentral()
+	}
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+	dependencies {
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	}
+}
+
+subprojects {
+	dependencies {
+
+	}
+}
+version = getVersion()
+
+
+dependencies {
+
+}
+
+tasks.named('test', Test) {
+	useJUnitPlatform()
+}

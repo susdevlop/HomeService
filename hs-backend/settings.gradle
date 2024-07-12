@@ -1,0 +1,3 @@
+rootProject.name = 'hs-backend'
+include 'hs-web'
+include 'hs-common'
