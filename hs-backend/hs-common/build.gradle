@@ -5,8 +5,9 @@ plugins {
 
 version = '0.0.1-SNAPSHOT'
 
-
-
+tasks.named('bootJar').configure {
+    enabled = false
+}
 
 dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'

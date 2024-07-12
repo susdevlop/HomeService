@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/HomeService.iml" filepath="$PROJECT_DIR$/.idea/HomeService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hs-common/hs-backend.hs-common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hs-common/hs-backend.hs-common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hs-web/hs-backend.hs-web.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hs-web/hs-backend.hs-web.main.iml" />
     </modules>
   </component>
 </project>
