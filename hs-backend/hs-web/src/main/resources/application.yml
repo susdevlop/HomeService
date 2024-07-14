@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: hs-web
+  # 模板引擎
+  thymeleaf:
+    mode: HTML
+    encoding: utf-8
+    # 禁用缓存
+    cache: false
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+
+# 日志配置
+logging:
+  level:
+    us.sushome: info
+    org.springframework: info
