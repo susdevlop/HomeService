@@ -45,8 +45,8 @@ subprojects {
 //		implementation 'org.slf4j:slf4j-api:1.7.36'
 		// Logback 实现
 //		implementation 'ch.qos.logback:logback-classic:1.2.11' // 使用最新稳定版
-		compileOnly "org.projectlombok:lombok:1.18.24"
-		annotationProcessor "org.projectlombok:lombok:1.18.24"
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor "org.projectlombok:lombok"
 	}
 }
 //version = '0.0.1-SNAPSHOT'
