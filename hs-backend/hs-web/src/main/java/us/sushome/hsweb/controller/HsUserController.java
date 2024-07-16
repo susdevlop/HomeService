@@ -16,7 +16,8 @@ public class HsUserController {
     @Autowired
     private IHsUserService iHsUserService;
 
-    //@PostMapping("/getAllUser")
-    //public List<HsUser> getAllUser(){
-    //}
+    @PostMapping("/getAllUser")
+    public List<HsUser> getAllUser(){
+        return iHsUserService.getAllUser();
+    }
 }
