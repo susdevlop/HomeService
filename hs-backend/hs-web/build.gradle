@@ -42,20 +42,18 @@ plugins {
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
 }
-
+group 'us.sushome.web'
 version = ''
 
 
 dependencies {
+    implementation project(':hs-common')
+    implementation project(':hs-db')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
-tasks.named('test', Test) {
-    useJUnitPlatform()
-}
 
 // 将依赖包复制到lib目录
 task copyJar(type: Copy) {

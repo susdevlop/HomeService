@@ -1,0 +1,12 @@
+group = 'us.sushome.generator'
+version = '0.0.1-SNAPSHOT'
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'com.baomidou:mybatis-plus-generator:3.5.7'
+    implementation 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.7'
+}
+tasks.named('bootJar').configure {
+    enabled = false
+}

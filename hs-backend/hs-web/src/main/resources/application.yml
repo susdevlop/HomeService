@@ -1,17 +1,21 @@
 spring:
   application:
     name: hs-web
-  # 模板引擎
-  thymeleaf:
-    mode: HTML
-    encoding: utf-8
-    # 禁用缓存
-    cache: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/home_service?serverTimezone=UTC
+    username: root
+    password: sussql123
+    hikari:
+      connection-timeout: 2000
   # 服务模块
   devtools:
     restart:
       # 热部署开关
       enabled: true
+
+server:
+  port: 8888
 
 # 日志配置
 logging:

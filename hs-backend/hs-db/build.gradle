@@ -1,0 +1,13 @@
+group = 'us.sushome.db'
+version = '0.0.1-SNAPSHOT'
+
+
+dependencies {
+    implementation project(":hs-common")
+    implementation 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.7'
+    implementation "io.swagger:swagger-models:1.6.9"
+
+}
+//tasks.named('bootJar').configure {
+//    enabled = false
+//}

@@ -1,3 +1,6 @@
 rootProject.name = 'hs-backend'
 include 'hs-web'
 include 'hs-common'
+include 'hs-db'
+include 'hs-generator'
+
