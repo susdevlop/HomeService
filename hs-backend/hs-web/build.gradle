@@ -1,60 +1,14 @@
-// 尝试从 Git 标签获取版本号
-def getVersionFromGit() {
-    try {
-        def tag = 'git describe --tags --abbrev=0'.execute().text.trim()
-        return tag
-    } catch (Exception e) {
-        println "Failed to get version from Git tags: ${e.message}"
-        return null
-    }
-}
-// 从 version.properties 文件获取版本号
-def getVersionFromProperties() {
-    def versionFile = file('./src/main/resources/gradle.properties')
-    def properties = new Properties()
-    // 尝试从文件中读取版本号
-    if (versionFile.exists()) {
-        try {
-            versionFile.withInputStream { properties.load(it) }
-            return properties.getProperty('version')
-        } catch (Exception e) {
-            println "Failed to load version from version.properties: ${e.message}"
-            return null
-        }
-    } else {
-        println "version.properties file not found."
-        return null
-    }
-}
-// 主逻辑：先尝试从 Git 获取版本号，失败则从 version.properties 获取
-def getVersion() {
-    def version = getVersionFromGit()
-    if (version == null || version == "") {
-        version = getVersionFromProperties()
-    }
-    def v = version ?: '1.0.0-default'  // 如果都获取不到，则返回一个默认版本号
-    println("当前版本号:"+v)
-    return v
-}
-
-
-plugins {
-    id 'org.springframework.boot' version '3.3.1'
-    id 'io.spring.dependency-management' version '1.1.5'
-}
 group 'us.sushome.web'
-version = ''
-
 
 dependencies {
     implementation project(':hs-common')
     implementation project(':hs-db')
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.7'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 }
-
 
 // 将依赖包复制到lib目录
 task copyJar(type: Copy) {
@@ -80,7 +34,7 @@ bootJar {
     // jar包名称，默认是settings.gradle下的工程名 rootProject.name = 'alog-server'
     archiveBaseName = 'hs-backend'
     // jar包版本号
-    archiveVersion = getVersion()
+    archiveVersion = getBuildVersion()
     mainClass.set('us.sushome.hsweb.HsWebApplication')
     // 排除所有的jar
     excludes = ["*.jar","**/.idea/**"]

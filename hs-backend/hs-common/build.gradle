@@ -2,6 +2,8 @@ group = 'us.sushome.common'
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
+    api "io.swagger:swagger-models:1.6.9"
+    api 'com.baomidou:mybatis-plus-spring-boot3-starter:3.5.7'
 }
 
 tasks.named('bootJar').configure {

@@ -22,3 +22,4 @@ logging:
   level:
     us.sushome: info
     org.springframework: info
+  config: classpath:log/log4j2.xml

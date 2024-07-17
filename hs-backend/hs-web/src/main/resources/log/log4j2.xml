@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <Properties>
+        <property name="basePath">${sys:user.home}/logs/api</property>
+        <property name="greatestName">greatest</property>
+        <property name="systemName">system</property>
+        <property name="greatestPath">${basePath}/${greatestName}</property>
+        <property name="systemPath">${basePath}/${systemName}</property>
+        <property name="console_log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %l - %m%n</property>
+        <Property name="pattern_layout">%d [%X{traceId}] [%t] %level (%F %M %L) - %msg%n</Property>
+        <property name="info_fileName">${basePath}/${greatestName}-info.log</property>
+        <property name="error_fileName">${basePath}/${greatestName}-error.log</property>
+        <property name="system_fileName">${basePath}/${systemName}-info.log</property>
+        <property name="system_error_fileName">${basePath}/${systemName}-error.log</property>
+        <property name="dbName">main</property>
+        <property name="dbPath">${basePath}/${dbName}</property>
+        <property name="db_fileName">${basePath}/${dbName}-info.log</property>
+
+        <!-- 日志默认压缩路径,将超过指定文件大小的日志,自动存入按"年月"建立的文件夹下面并进行压缩,作为存档 -->
+        <property name="rolling_filePattern_greatestInfo_filePattern">
+            ${greatestPath}/%d{yyyy-MM}/${greatestName}Info-%d{yyyy-MM-dd}-%i.log.gz
+        </property>
+        <property name="rolling_filePattern_greatestError_filePattern">
+            ${greatestPath}/%d{yyyy-MM}/${greatestName}Error-%d{yyyy-MM-dd}-%i.log.gz
+        </property>
+
+        <property name="rolling_filePattern_systemInfo_filePattern">
+            ${systemPath}/%d{yyyy-MM}/${systemName}Info-%d{yyyy-MM-dd}-%i.log.gz
+        </property>
+
+        <property name="rolling_filePattern_systemError_filePattern">
+            ${systemPath}/%d{yyyy-MM}/${systemName}Error-%d{yyyy-MM-dd}-%i.log.gz
+        </property>
+
+        <property name="rolling_filePattern_db_filePattern">
+            ${dbPath}/%d{yyyy-MM}/${dbName}Info-%d{yyyy-MM-dd}-%i.log.gz
+        </property>
+
+        <!-- 日志默认同类型日志,同一文件夹下可以存放的数量,不设置此属性则默认为7个,filePattern最后要带%i才会生效 -->
+        <property name="rolling_max">500</property>
+        <!-- 日志默认同类型日志,多久生成一个新的日志文件,这个配置需要和filePattern结合使用;
+                       如果设置为1,filePattern是%d{yyyy-MM-dd}到天的格式,则间隔一天生成一个文件
+                       如果设置为12,filePattern是%d{yyyy-MM-dd-HH}到小时的格式,则间隔12小时生成一个文件 -->
+        <property name="rolling_timeInterval">1</property>
+        <!-- 日志默认同类型日志,是否对封存时间进行调制,若为true,则封存时间将以0点为边界进行调整,
+                如:现在是早上3am,interval是4,那么第一次滚动是在4am,接着是8am,12am...而不是7am -->
+        <property name="rolling_timeModulate">true</property>
+
+        <!-- 日志默认切割的最小单位 -->
+        <property name="every_file_size">20MB</property>
+    </Properties>
+
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${console_log_pattern}"/>
+        </Console>
+
+        <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingInfoFile" fileName="${info_fileName}"
+                     filePattern="${rolling_filePattern_greatestInfo_filePattern}">
+            <!--            <JsonLayout compact="true" locationInfo="true" complete="false" eventEol="true"/>-->
+            <PatternLayout pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+            <!-- 设置同类型日志,同一文件夹下可以存放的数量,如果不设置此属性则默认存放7个文件 -->
+            <DefaultRolloverStrategy max="${rolling_max}"/>
+        </RollingFile>
+
+        <!-- error 日志 -->
+        <RollingFile name="RollingErrorFile" fileName="${error_fileName}"
+                     filePattern="${rolling_filePattern_greatestError_filePattern}">
+            <!--            <JsonLayout compact="true" locationInfo="true" complete="false" eventEol="true"/>-->
+            <PatternLayout pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="${rolling_max}"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+        <!-- 系统日志 -->
+        <RollingFile name="RollingSystemFile" fileName="${system_fileName}"
+                     filePattern="${rolling_filePattern_systemInfo_filePattern}">
+            <!--            <JsonLayout compact="true" locationInfo="true" complete="false" eventEol="true"/>-->
+            <PatternLayout pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rolling_max}"/>
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+
+        <!-- 系统错误日志 -->
+        <RollingFile name="RollingSystemErrorFile" fileName="${system_error_fileName}"
+                     filePattern="${rolling_filePattern_systemError_filePattern}">
+            <!--            <JsonLayout compact="true" locationInfo="true" complete="false" eventEol="true"/>-->
+            <PatternLayout pattern="${pattern_layout}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="${rolling_max}"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+        <!--        <RollingFile name="RollingDbFileInfo" fileName="${db_fileName}"-->
+        <!--                     filePattern="${rolling_filePattern_systemError_filePattern}">-->
+        <!--            <PatternLayout pattern="${pattern_layout}"/>-->
+        <!--            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>-->
+        <!--            <Policies>-->
+        <!--                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>-->
+        <!--            </Policies>-->
+        <!--        </RollingFile>-->
+        <RollingFile name="RollingDbFileInfo"
+                     fileName="${db_fileName}"
+                     filePattern="${rolling_filePattern_db_filePattern}">
+            <PatternLayout pattern="${pattern_layout}"/>
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy max="${rolling_max}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="${rolling_timeModulate}"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <logger name="com.xms.mapper" level="debug" additivity="false">
+            <AppenderRef ref="RollingDbFileInfo"/>
+        </logger>
+        <!--        <logger name="org.mybatis" level="debug" additivity="false">-->
+        <!--            <AppenderRef ref="RollingDbFileInfo"/>-->
+        <!--        </logger>-->
+        <!--        <logger name="com.alibaba.druid" level="debug" additivity="false">-->
+        <!--            <AppenderRef ref="RollingDbFileInfo"/>-->
+        <!--        </logger>-->
+        <logger name="com.xms" additivity="false">
+            <AppenderRef ref="RollingInfoFile" level="info"/>
+            <AppenderRef ref="RollingErrorFile" level="error"/>
+            <AppenderRef ref="Console" level="info"/>
+        </logger>
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingSystemFile"/>
+            <appender-ref ref="RollingSystemErrorFile"/>
+        </root>
+    </Loggers>
+</Configuration>
