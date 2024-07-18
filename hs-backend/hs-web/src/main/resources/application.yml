@@ -1,7 +1,8 @@
 spring:
   application:
     name: hs-web
-
+  profiles:
+    active: common
   datasource:
     url: jdbc:mysql://localhost:3306/home_service?serverTimezone=UTC
     username: root
