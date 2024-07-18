@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author sushome
- * @since 2024-07-16
+ * @since 2024-07-18
  */
 @Service
 public class IHsUserService extends ServiceImpl<HsUserMapper, HsUser> {

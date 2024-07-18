@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -14,8 +15,9 @@ import lombok.Setter;
  * </p>
  *
  * @author sushome
- * @since 2024-07-16
+ * @since 2024-07-18
  */
+@ToString
 @Getter
 @Setter
 @TableName("hs_user")

@@ -38,6 +38,7 @@ public class Generator {
                 .strategyConfig(builder ->
                         builder.addInclude("hs_user") // 设置需要生成的表名
                                 .entityBuilder()
+                                .javaTemplate("/templates/model.java")
                                 .enableFileOverride()
                                 .enableLombok() // 启用 Lombok
                                 .enableTableFieldAnnotation() // 启用字段注解
@@ -45,6 +46,7 @@ public class Generator {
                                 .enableFileOverride()
                                 .disableServiceImpl()
                                 .serviceTemplate("/templates/service.java")
+                                .enableFileOverride()
                                 .controllerBuilder()
                                 .disable()
                 )
