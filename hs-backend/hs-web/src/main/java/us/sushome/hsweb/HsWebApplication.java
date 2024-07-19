@@ -18,5 +18,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class HsWebApplication {
     public static void main(String[] args) {
         SpringApplication.run(HsWebApplication.class, args);
+        System.out.println("  _   _  ___  __  __ _____   ____  _____ ______     _____ ____ _____ \n" +
+                " | | | |/ _ \\|  \\/  | ____| / ___|| ____|  _ \\ \\   / /_ _/ ___| ____|\n" +
+                " | |_| | | | | |\\/| |  _|   \\___ \\|  _| | |_) \\ \\ / / | | |   |  _|  \n" +
+                " |  _  | |_| | |  | | |___   ___) | |___|  _ < \\ V /  | | |___| |___ \n" +
+                " |_| |_|\\___/|_|  |_|_____| |____/|_____|_| \\_\\ \\_/  |___\\____|_____|\n" +
+                " copy right 2024.                               power by TzuHsing Su");
     }
 }

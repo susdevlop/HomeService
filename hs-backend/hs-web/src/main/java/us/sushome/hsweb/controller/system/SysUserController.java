@@ -1,4 +1,4 @@
-package us.sushome.hsweb.controller;
+package us.sushome.hsweb.controller.system;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import us.sushome.db.service.IHsUserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class HsUserController extends BaseController {
+@RequestMapping("/system")
+public class SysUserController extends BaseController {
     @Autowired
     private IHsUserService iHsUserService;
 

@@ -14,3 +14,15 @@ home-service:
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
+
+security:
+  auth-login-url: "/api/auth/login"
+  jwt-secret-key: "p2s5v8y/B?E(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUjXnZr4u7x!A%D*G-KaPdS"
+  token-prefix: "Bearer "
+  token-header: "Authorization"
+  token-type: "JWT"
+  token-role-claim: "role"
+  token-issuer: "security"
+  token-audience: "security-all"
+  expiration-time: 7200 # 2 hours in seconds
+  expiration-remember-time: 604800 # 7 days in seconds
