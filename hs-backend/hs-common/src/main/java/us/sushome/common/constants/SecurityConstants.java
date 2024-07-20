@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class SecurityConstants {
 
-    @Value("${security.auth-login-url:/api/auth/login}")
+    @Value("${security.auth-login-url:/openApi/login}")
     private String authLoginUrl;
 
     @Value("${security.jwt-secret-key:p2s5v8y/B?E(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUjXnZr4u7x!A%D*G-KaPdS}")

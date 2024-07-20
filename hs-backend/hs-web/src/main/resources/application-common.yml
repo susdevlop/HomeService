@@ -16,7 +16,7 @@ home-service:
   captchaType: math
 
 security:
-  auth-login-url: "/api/auth/login"
+  auth-login-url: "/openApi/login"
   jwt-secret-key: "p2s5v8y/B?E(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUjXnZr4u7x!A%D*G-KaPdS"
   token-prefix: "Bearer "
   token-header: "Authorization"

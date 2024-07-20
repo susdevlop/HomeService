@@ -40,7 +40,7 @@ public class JwtUtils {
      * @param isRemember 是否记住我
      * @return 返回生成的 token
      */
-    public static String generateToken(String userName, List<String> roles, boolean isRemember) {
+    public static String generateToken(String userName, Integer role, boolean isRemember) {
         byte[] jwtSecretKey = DatatypeConverter.parseBase64Binary(SecurityConstants.JWT_SECRET_KEY);
         // 过期时间
         long expiration = isRemember ? SecurityConstants.EXPIRATION_REMEMBER_TIME : SecurityConstants.EXPIRATION_TIME;
@@ -50,7 +50,7 @@ public class JwtUtils {
                 .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .signWith(Keys.hmacShaKeyFor(jwtSecretKey), SignatureAlgorithm.HS256)
                 .setSubject(userName)
-                .claim(SecurityConstants.TOKEN_ROLE_CLAIM, roles)
+                .claim(SecurityConstants.TOKEN_ROLE_CLAIM, role)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setIssuedAt(new Date())
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
@@ -94,12 +94,11 @@ public class JwtUtils {
     public static Authentication getAuthentication(String token) {
         Claims claims = getTokenBody(token);
         // 获取用户角色字符串
-        List<String> roles = (List<String>)claims.get(SecurityConstants.TOKEN_ROLE_CLAIM);
-        List<SimpleGrantedAuthority> authorities =
-                Objects.isNull(roles) ? Collections.singletonList(new SimpleGrantedAuthority(UserRoleConstants.GUEST_USER)) :
-                        roles.stream()
-                                .map(SimpleGrantedAuthority::new)
-                                .collect(Collectors.toList());
+        Integer roleId = (Integer) claims.get(SecurityConstants.TOKEN_ROLE_CLAIM);
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(roleId != null ? String.valueOf(roleId) :UserRoleConstants.GUEST_USER)
+        );
+
         // 获取用户名
         String userName = claims.getSubject();
 

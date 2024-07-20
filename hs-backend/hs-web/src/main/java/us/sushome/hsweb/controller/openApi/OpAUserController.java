@@ -3,6 +3,7 @@ package us.sushome.hsweb.controller.openApi;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,17 +22,24 @@ public class OpAUserController extends BaseController {
     private IHsUserService iHsUserService;
 
     @PostMapping("/login")
-    public String login(){
-
-        return "list";
-    }
-
-    @PostMapping("/register")
-    public Boolean register(@RequestBody  String body){
+    public String login(@RequestBody  String body){
         JSONObject jsonObject = JSONObject.parseObject(body);
         String userName = jsonObject.get("userName").toString();
         String userPasswd = jsonObject.get("userPasswd").toString();
-        Boolean isSuccess = iHsUserService.register(userName,userPasswd);
-        return isSuccess;
+        Boolean isRememberMe = jsonObject.getBoolean("remember");
+        if(isRememberMe == null){
+            isRememberMe = false;
+        }
+        return iHsUserService.login(userName,userPasswd,isRememberMe);
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestBody String body){
+        logger.info("body"+body);
+        JSONObject jsonObject = JSONObject.parseObject(body);
+        String userName = jsonObject.get("userName").toString();
+        String userPasswd = jsonObject.get("userPasswd").toString();
+        String token = iHsUserService.register(userName,userPasswd);
+        return token;
     }
 }

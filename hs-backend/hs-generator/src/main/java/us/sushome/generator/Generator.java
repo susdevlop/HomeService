@@ -36,7 +36,7 @@ public class Generator {
                                 .controller("")
                 )
                 .strategyConfig(builder ->
-                        builder.addInclude("hs_user") // 设置需要生成的表名
+                        builder.addInclude("hs_user","hs_roles","hs_permission") // 设置需要生成的表名
                                 .entityBuilder()
                                 .javaTemplate("/templates/model.java")
                                 .enableFileOverride()

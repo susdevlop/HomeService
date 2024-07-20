@@ -1,6 +1,7 @@
 package us.sushome.db.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -11,23 +12,23 @@ import lombok.ToString;
 
 /**
  * <p>
- * user table 
+ * user table
  * </p>
  *
  * @author sushome
- * @since 2024-07-18
+ * @since 2024-07-20
  */
 @ToString
 @Getter
 @Setter
 @TableName("hs_user")
-@ApiModel(value = "HsUser对象", description = "user table ")
+@ApiModel(value = "HsUser对象", description = "user table")
 public class HsUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("id")
-    @TableField("user_id")
+    @TableId("user_id")
     private String userId;
 
     @TableField("user_name")
@@ -49,4 +50,8 @@ public class HsUser implements Serializable {
 
     @TableField("user_openid")
     private String userOpenid;
+
+    @ApiModelProperty("对应的权限 id")
+    @TableField("user_role_id")
+    private Integer userRoleId;
 }
