@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,6 +44,8 @@ public class SecurityConfiguration {
 
     @Autowired
     private AuthenticationConfiguration authenticationManager;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -56,7 +61,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptions ->
                         exceptions
-                                .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                                //.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
                                 .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .csrf(csrf -> csrf.disable())
@@ -84,21 +89,10 @@ public class SecurityConfiguration {
                             //获取当前请求的 URL 地址
                             String requestURI = object.getRequest().getRequestURI();
                             System.out.println("requestURI:"+requestURI);
-                            System.out.println("authentication"+authentication);
                             //获取当前登录用户的角色
                             Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
                             System.out.println("\n 当前用户角色：\n"+authorities+"\n");
-                            String requiredPermission = (String) object.getRequest().getAttribute("RequiresPermissionsAttribute");
-                            System.out.println("\nrequiredPermission注解的值:"+requiredPermission + "\n");
-                            //if (requiredPermission != null) {
-                            //    if (authentication.getAuthorities().stream()
-                            //            .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(requiredPermission))) {
-                            //        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
-                            //        return;
-                            //    }
-                            //}
-
-                            return new AuthorizationDecision(true);
+                            return new AuthorizationDecision(false);
                         }))
                 .sessionManagement(sessionManagement ->
                         sessionManagement

@@ -2,13 +2,13 @@ package us.sushome.hsweb.controller.system;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import us.sushome.common.controller.BaseController;
 import us.sushome.db.model.HsUser;
 import us.sushome.db.service.IHsUserService;
-import us.sushome.hsweb.annotation.RequiresPermissions;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class SysUserController extends BaseController {
         return list;
     }
 
-    @RequiresPermissions("system:getAllUser")
+    @PreAuthorize("@Pm.check('system:getAllUser')")
     @PostMapping("/getAllUserByAdminRole")
     public List<HsUser> getAllUserByAdminRole(){
         List<HsUser> list = iHsUserService.getAllUser();

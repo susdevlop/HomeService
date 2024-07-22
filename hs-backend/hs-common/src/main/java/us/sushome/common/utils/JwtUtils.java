@@ -103,7 +103,6 @@ public class JwtUtils {
         String userName = claims.getSubject();
 
         return new UsernamePasswordAuthenticationToken(userName, token, authorities);
-
     }
 
     private static Claims getTokenBody(String token) {
