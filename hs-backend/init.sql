@@ -31,11 +31,7 @@ create table IF NOT EXISTS home_service.hs_permission
 )
     comment '权限表';
 
-INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (0, '超级管理员', 1);
-INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (1, '管理员', 1);
-INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (-2, '来宾', 1);
-INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (2, '用户', 1);
-INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (-1, '未授权用户', 1);
+
 
 
 create table IF NOT EXISTS home_service.hs_roles
@@ -46,3 +42,8 @@ create table IF NOT EXISTS home_service.hs_roles
 )
     comment '权限表';
 
+INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (0, '超级管理员', 1);
+INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (1, '管理员', 1);
+INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (-2, '来宾', 1);
+INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (2, '用户', 1);
+INSERT INTO home_service.hs_roles (roles_id, roles_name, roles_enable) VALUES (-1, '未授权用户', 1);

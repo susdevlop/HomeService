@@ -70,4 +70,8 @@ public class IHsUserService extends ServiceImpl<HsUserMapper, HsUser> {
             return this.login(userName,userPasswd,false);
         }
     }
+    public Boolean logout(){
+        SecurityContextHolder.clearContext();
+        return true;
+    }
 }

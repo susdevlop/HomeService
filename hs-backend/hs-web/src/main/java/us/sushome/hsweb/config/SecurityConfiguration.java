@@ -24,10 +24,12 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 import us.sushome.common.constants.SecurityConstants;
+import us.sushome.common.constants.UserRoleConstants;
 import us.sushome.hsweb.filter.JwtAuthorizationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import us.sushome.hsweb.handler.CustomAccessDeniedHandler;
+import us.sushome.hsweb.handler.CustomEntryPoint;
 
 import java.util.Collection;
 
@@ -45,6 +47,8 @@ public class SecurityConfiguration {
     @Autowired
     private AuthenticationConfiguration authenticationManager;
 
+    @Autowired
+    private CustomEntryPoint customEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,52 +57,46 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationManager am = authenticationManager.getAuthenticationManager();
-        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(am);
+        //AuthenticationManager am = authenticationManager.getAuthenticationManager();
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter();
 
         http
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exceptions ->
-                        exceptions
-                                //.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-                                .accessDeniedHandler(customAccessDeniedHandler)
-                )
-                .csrf(csrf -> csrf.disable())
-                .headers(headers ->
-                        headers
-                                .addHeaderWriter((request, response) -> {
-                                    response.setHeader("X-Frame-Options", "DENY");
-                                })
-                )
-                .logout(logout -> logout.logoutUrl("/openApi/logout"))
-                //.authorizeRequests(authorizeRequests ->
-                //        authorizeRequests
-                //                .requestMatchers("/").permitAll()
-                //                .requestMatchers(HttpMethod.POST, SecurityConstants.AUTH_LOGIN_URL).permitAll()
-                //                .requestMatchers(HttpMethod.POST, "/openApi/register").permitAll()
-                //                .anyRequest().authenticated()
-                //)
-                .authorizeHttpRequests(register -> register
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers(HttpMethod.POST, SecurityConstants.AUTH_LOGIN_URL).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/openApi/register").permitAll()
-                        .anyRequest().access((authentication, object) -> {
-                            //表示请求的 URL 地址和数据库的地址是否匹配上了
-                            boolean isMatch = false;
-                            //获取当前请求的 URL 地址
-                            String requestURI = object.getRequest().getRequestURI();
-                            System.out.println("requestURI:"+requestURI);
-                            //获取当前登录用户的角色
-                            Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
-                            System.out.println("\n 当前用户角色：\n"+authorities+"\n");
-                            return new AuthorizationDecision(false);
-                        }))
-                .sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+            .anonymous(anonymous -> anonymous.authorities(UserRoleConstants.GUEST_USER))
+            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(exceptions ->
+                exceptions
+                    .authenticationEntryPoint(customEntryPoint)
+                    .accessDeniedHandler(customAccessDeniedHandler)
+            )
+            .csrf(csrf -> csrf.disable())
+            .headers(headers ->
+                headers
+                    .addHeaderWriter((request, response) -> {
+                        response.setHeader("X-Frame-Options", "DENY");
+                    })
+            )
+            .logout(logout -> logout.logoutUrl("/openApi/logout"))
+            .authorizeHttpRequests(register -> register
+                .requestMatchers("/").permitAll()
+                .requestMatchers(HttpMethod.POST, SecurityConstants.AUTH_LOGIN_URL).permitAll()
+                .requestMatchers(HttpMethod.POST, "/openApi/register").permitAll()
+                .anyRequest().access((authentication, object) -> {
+                    //表示请求的 URL 地址和数据库的地址是否匹配上了
+                    boolean isMatch = false;
+                    //获取当前请求的 URL 地址
+                    String requestURI = object.getRequest().getRequestURI();
+                    System.out.println("requestURI:"+requestURI);
+                    //获取当前登录用户的角色
+                    Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
+                    System.out.println("\n 当前用户角色：\n"+authorities+"\n");
+                    return new AuthorizationDecision(false);
+                }))
+            .sessionManagement(sessionManagement ->
+                //不会创建或使用 HTTP 会话
+                sessionManagement
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
         return http.build();
     }
-
 }

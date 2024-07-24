@@ -36,7 +36,7 @@ public class JwtUtils {
      * 根据用户名和用户角色生成 token
      *
      * @param userName   用户名
-     * @param roles      用户角色
+     * @param role      用户角色
      * @param isRemember 是否记住我
      * @return 返回生成的 token
      */

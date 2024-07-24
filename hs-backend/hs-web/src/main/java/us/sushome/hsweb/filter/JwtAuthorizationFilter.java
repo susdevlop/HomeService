@@ -22,13 +22,13 @@ import java.io.IOException;
  */
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
-
-    private final AuthenticationManager authenticationManager;
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-        this.requestMappingHandlerMapping = new RequestMappingHandlerMapping();
-    }
+    //private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    //
+    //private final AuthenticationManager authenticationManager;
+    //public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    //    this.authenticationManager = authenticationManager;
+    //    this.requestMappingHandlerMapping = new RequestMappingHandlerMapping();
+    //}
 
     @Override
     protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, jakarta.servlet.FilterChain filterChain) throws jakarta.servlet.ServletException, IOException {

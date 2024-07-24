@@ -42,4 +42,10 @@ public class OpAUserController extends BaseController {
         String token = iHsUserService.register(userName,userPasswd);
         return token;
     }
+
+    @PostMapping("/logout")
+    public Boolean logout(){
+        iHsUserService.logout();
+        return true;
+    }
 }
