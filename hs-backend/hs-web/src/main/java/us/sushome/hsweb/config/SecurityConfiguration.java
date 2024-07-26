@@ -92,17 +92,10 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, SecurityConstants.AUTH_LOGIN_URL).permitAll()
                 .requestMatchers(HttpMethod.POST, "/openApi/register").permitAll()
                 .anyRequest().access((authentication, object) -> {
-                    //表示请求的 URL 地址和数据库的地址是否匹配上了
-                    boolean isMatch = false;
-                    //获取当前请求的 URL 地址
                     HttpServletRequest request = object.getRequest();
-                    String requestURI = request.getRequestURI();
-                    System.out.println("requestURI:"+requestURI);
-
                     // 从 HTTP 请求中获取 token
                     String token = jwtAuthorizationFilter.getTokenFromHttpRequest(request);
                     Logger.info("请求中的 token："+token);
-
                     // 验证 token 是否有效
                     if (StringUtils.hasText(token)) {
                         try{
@@ -115,6 +108,12 @@ public class SecurityConfiguration {
                                 //获取当前登录用户的角色
                                 Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
                                 System.out.println("\n 当前用户角色：\n"+authorities+"\n");
+                                //表示请求的 URL 地址和数据库的地址是否匹配上了
+                                boolean isMatch = false;
+                                //获取当前请求的 URL 地址
+                                String requestURI = request.getRequestURI();
+                                System.out.println("requestURI:"+requestURI);
+
                                 return new AuthorizationDecision(true);
                             }
                         }catch (RuntimeException e) {
