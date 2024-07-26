@@ -75,15 +75,19 @@ public class JwtUtils {
             return true;
         } catch (ExpiredJwtException e) {
             logger.warn("Request to parse expired JWT : {} failed : {}", token, e.getMessage());
+            throw new RuntimeException("token已过期");
         } catch (UnsupportedJwtException e) {
             logger.warn("Request to parse unsupported JWT : {} failed : {}", token, e.getMessage());
+            throw new RuntimeException("token不受支持");
         } catch (MalformedJwtException e) {
             logger.warn("Request to parse invalid JWT : {} failed : {}", token, e.getMessage());
+            throw new RuntimeException("token无效");
         } catch (IllegalArgumentException e) {
             logger.warn("Request to parse empty or null JWT : {} failed : {}", token, e.getMessage());
+            throw new RuntimeException("token为空或null");
         }
-        return false;
     }
+
 
     /**
      * 根据 token 获取用户认证信息
